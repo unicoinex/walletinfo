@@ -1744,7 +1744,7 @@ def print_keys(json_db, print_public=True, print_private=True):
             elif print_private:
                 print k['private']
             elif print_public:
-                print k['public']
+                print k['pubkey']
 
 
 def print_names(json_db):
