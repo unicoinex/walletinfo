@@ -13,43 +13,43 @@ __author__ = 'hesham'
 coins_list = {0: ["Bitcoin", "BTC",
                   "https://blockchain.info/rawaddr/%s",
                   "https://blockchain.info/address/%s",
-                  "", 1],
+                  'final_balance":(\d+),', 0.00000001],
               48: ["Litecoin", "LTC",
-                   "http://block-explorer.com/address/%s",
-                   "http://block-explorer.com/address/%s",
-                   "", 1],
+                   "http://ltc.blockr.io/api/v1/address/info/%s",
+                   "http://ltc.blockr.io/address/info/%s",
+                   'balance": ([\d.]+),', 1],
               55: ["Peercoin", "PPC",
+                   "http://ppc.blockr.io/api/v1/address/info/%s",
                    "http://ppc.blockr.io/address/info/%s",
-                   "http://ppc.blockr.io/address/info/%s",
-                   "", 1],
+                   'balance": ([\d.]+),', 1],
               30: ["Dogecoin", "DOGE",
+                   "https://dogechain.info/chain/Dogecoin/q/addressbalance/%s",
                    "http://dogechain.info/address/%s",
-                   "http://dogechain.info/address/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               76: ["Darkcoin", "DRK",
+                   "http://explorer.darkcoin.io/chain/DarkCoin/q/addressbalance/%s",
                    "http://explorer.darkcoin.io/address/%s",
-                   "http://explorer.darkcoin.io/address/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               52: ["Namecoin", "NMC",
+                   "http://192.241.222.65/chain/Namecoin/q/addressbalance/%s",
                    "http://bitinfocharts.com/namecoin/address/%s",
-                   "http://bitinfocharts.com/namecoin/address/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               25: ["Blackcoin", "BC",
+                   "http://blocks.blackcoin.pw/chain/BlackCoin/q/addressbalance/%s",
                    "http://blocks.blackcoin.pw/address/%s",
-                   "http://blocks.blackcoin.pw/address/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               56: ["BitShares-PTS", "PTS",
+                   "http://ptsexplorer.cloudapp.net/chain/BitShares-PTS/q/addressbalance/%s",
                    "https://coinplorer.com/PTS/Addresses/%s",
-                   "https://coinplorer.com/PTS/Addresses/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               71: ["Vertcoin", "VTC",
+                   "https://explorer.vertcoin.org/chain/Vertcoin/q/addressbalance/%s",
                    "https://explorer.vertcoin.org/address/%s",
-                   "https://explorer.vertcoin.org/address/%s",
-                   "", 1],
+                   '([\d.]+)', 1],
               58: ["Quark", "QRK",
+                   "http://qrk.blockr.io/api/v1/address/info/%s",
                    "http://qrk.blockr.io/address/info/%s",
-                   "http://qrk.blockr.io/address/info/%s",
-                   "", 1]}
+                   'balance": ([\d.]+),', 1]}
 
 missing_dep = []
 
@@ -80,6 +80,7 @@ import struct
 import urllib
 import random
 import os
+import re
 
 
 #TODO this URL should come from the config file
@@ -1296,8 +1297,6 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
     for k in json_db['keys']:
         i += 1
         addr = k['addr']
-        if include_balance:
-            k["balance"] = balance(balance_site, k["addr"])
 
         if addr in json_db['names'].keys():
             k["label"] = json_db['names'][addr]
@@ -1506,8 +1505,6 @@ def ASecretToSecret(sec):
     vch = DecodeBase58Check(sec)
     if not vch:
         return False
-    if vch[0] != chr((addrtype + 128) & 255):
-        print 'Warning: address prefix seems bad (%d vs %d)' % (ord(vch[0]), (addrtype + 128) & 255)
     return vch[1:]
 
 
@@ -1703,15 +1700,25 @@ def parse_BlockLocator(vds):
         return d
 
 
-def balance(site, address):
-    page = urllib.urlopen("%s=%s" % (site, address))
-    json_acc = json.loads(page.read().split("<end>")[0])
-    if json_acc['0'] == 0:
-        return "Invalid address"
-    elif json_acc['0'] == 2:
-        return "Never used"
-    else:
-        return json_acc['balance']
+def print_balances(json_db):
+    for k in json_db['keys']:
+        if k:
+            site = coins_list[addrtype][2] % k['addr']
+            response = urllib.urlopen(site)
+            page = response.read()
+            m = re.search(coins_list[addrtype][4], page)
+            if m:
+                print k['addr'] + "," + str(float(m.group(1)) * coins_list[addrtype][5])
+            else:
+                print "Error reading balance for address: " + k['addr']
+
+
+def test_print_balance(addr, code):
+    site = coins_list[code][2] % addr
+    response = urllib.urlopen(site)
+    page = response.read()
+    m = re.search(coins_list[code][4], page)
+    print addr + "," + str(float(m.group(1)) * coins_list[code][5])
 
 
 def GetPubKey(pkey, compressed=False):
@@ -1760,7 +1767,7 @@ def print_coin_type():
 def print_explore_urls(json_db):
     for k in json_db['keys']:
         if k:
-            print coins_list[addrtype][2] % k['addr']
+            print coins_list[addrtype][3] % k['addr']
 
 
 def get_addrtype(v):
@@ -1862,7 +1869,8 @@ if __name__ == '__main__':
         exit(0)
 
     if options.list_balances:
-        print "Print balances"
+        #test_print_balance("mxmnhb4r5UghkahuxumPKkwRA9SJk4c4dT", 76)
+        print_balances(json_db)
         exit(0)
 
     if options.list_explore_url:
