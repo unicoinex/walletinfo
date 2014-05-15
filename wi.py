@@ -1753,10 +1753,8 @@ def print_names(json_db):
             print n + "," + json_db['names'][n]
 
 
-def print_type(json_db):
-    for n in json_db['names']:
-        if n:
-            return coins_list[ord(DecodeBase58Check(n)[0])][0]
+def print_coin_type():
+    print coins_list[addrtype][1] + "," + str(addrtype)
 
 
 def print_explore_urls(json_db):
@@ -1872,6 +1870,5 @@ if __name__ == '__main__':
         exit(0)
 
     if options.determine_coin:
-        addrtype = print_type(json_db)
-        print addrtype
+        print_coin_type()
         exit(0)
