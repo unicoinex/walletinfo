@@ -1,3 +1,13 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+#
+# unicoinex's wi.py
+# https://github.com/unicoinex/walletinfo.git
+# uses code from jackjack-jj which forked from Joric's pywallet.py
+# sponsored by coiner8 https://bitcointalk.org/index.php?topic=587012.0
+#
+
 __author__ = 'hesham'
 
 coins_list = {0: ["Bitcoin", "BTC",
@@ -69,6 +79,7 @@ import mmap
 import struct
 import urllib
 import random
+import os
 
 
 #TODO this URL should come from the config file
@@ -1763,6 +1774,7 @@ from optparse import OptionParser
 
 if __name__ == '__main__':
 
+    prog = os.path.basename(__file__)
 
     parser = OptionParser(usage="%prog [options]", version="%prog 1.0")
 
@@ -1810,11 +1822,11 @@ if __name__ == '__main__':
         passphrase = options.passphrase
 
     if 'bsddb' in missing_dep:
-        print("%prog needs 'bsddb' package to run, please install it")
+        print("%s needs 'bsddb' package to run, please install it" % prog)
         exit(0)
 
     if 'ecdsa' in missing_dep:
-        print("%prog needs 'ecdsa' package to run, please install it")
+        print("%s needs 'ecdsa' package to run, please install it" % prog)
         exit(0)
 
     db_dir = options.datadir
@@ -1823,7 +1835,7 @@ if __name__ == '__main__':
     if not options.check_encryption and not options.test_passphrase and not options.determine_coin \
             and not options.list_keys and not options.list_public_keys and not options.list_private_keys \
             and not options.list_contacts and not options.list_balances and not options.list_explore_url:
-        print "Nothing to do!"
+        print("Nothing to do! For help run '%s --help'" % prog)
         exit(0)
 
     encrypted = read_wallet(json_db, db_env, options.walletfile, True, True, "", False, options.test_passphrase)

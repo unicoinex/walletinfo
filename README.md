@@ -22,3 +22,4 @@ Options:
   --list-contacts       lists wallet address book contacts
   --balances            list balances for each key
   --explore-url         print block explorer url for each address
+```
