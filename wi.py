@@ -10,10 +10,10 @@
 
 __author__ = 'hesham'
 
-coins_list = {0: ["Bitcoin", "BTC",
-                  "https://blockchain.info/rawaddr/%s",
-                  "https://blockchain.info/address/%s",
-                  'final_balance":(\d+),', 0.00000001],
+coins_list = {0: ["Bitcoin", "BTC",                             # OTHERVERSION: [Name, Code
+                  "https://blockchain.info/rawaddr/%s",         # Machine Readable Balance URL
+                  "https://blockchain.info/address/%s",         # Human Readable Address Info URL
+                  'final_balance":(\d+),', 0.00000001],         # Regex for Machine Readable URL, Multiplier]
               48: ["Litecoin", "LTC",
                    "http://ltc.blockr.io/api/v1/address/info/%s",
                    "http://ltc.blockr.io/address/info/%s",
