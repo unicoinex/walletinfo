@@ -45,15 +45,5 @@ Mac OS X:
 Windows:
 ```
  1. Install Python 2.7
- 2. Install Twisted 11.0.0 for Py2.7, then Zope.Interface (a .egg file) for Py2.7: http://twistedmatrix.com/trac/wiki/Downloads
 
- 3. Untested, proposed by TeaRex: install Zope.Interface from http://www.lfd.uci.edu/~gohlke/pythonlibs
-
- If this doesn't work, you will have to install the egg file:
-
- 3(32bit). http://pypi.python.org/pypi/setuptools#downloads to install setuptools
- 3(64bit). http://pypi.python.org/pypi/setuptools#windows to download, then run ez_setup.py
-
- 4. Go to C:\Python27\Scripts
- 5. Run easy_install.exe zope.interface-3.6.4-py2.7-win-amd64.egg
 ```
