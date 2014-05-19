@@ -1893,7 +1893,6 @@ if __name__ == '__main__':
         exit(0)
 
     if options.list_keys:
-        print DecodeBase58Check("T51cyEnmbv9Dok5DyAbsQ7sLs6gnZvUyrciySbaqyYU2b2X5hwNV").encode('hex')
         if encrypted and not passphrase:
             print "Can't print public and private keys for encrypted wallet without passphrase!"
             exit(1)
