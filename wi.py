@@ -1319,16 +1319,19 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
                 if check:
                     check = False
                     pkey = EC_KEY(int('0x' + secret.encode('hex'), 16))
-                    if public_key != GetPubKey(pkey, compressed) and test_passphrase:
-                        print "Incorrect"
+                    if public_key != GetPubKey(pkey, compressed):
                         ppcorrect = False
-                        exit(1)
-                    elif public_key == GetPubKey(pkey, compressed) and test_passphrase:
-                        print "Correct"
-                        exit(0)
+                    elif public_key == GetPubKey(pkey, compressed):
+                        ppcorrect = True
 
-                if not ppcorrect:
-                    print "Incorrect passphrase!"
+                if test_passphrase and not ppcorrect:
+                    print "Incorrect"
+                    exit(1)
+                elif test_passphrase and ppcorrect:
+                    print "Correct"
+                    exit(0)
+                elif not ppcorrect:
+                    print "Incorrect passphrase! Exiting"
                     exit(1)
 
                 sec = SecretToASecret(secret, compressed)
