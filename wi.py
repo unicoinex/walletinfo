@@ -1111,63 +1111,6 @@ class Crypter_pycrypto(object):
         return AES.new(self.chKey, AES.MODE_CBC, self.chIV).decrypt(data)[0:32]
 
 
-try:
-    if not crypter:
-        import ctypes
-        import ctypes.util
-
-        ssl = ctypes.cdll.LoadLibrary(ctypes.util.find_library('ssl') or 'libeay32')
-        crypter = 'ssl'
-except:
-    pass
-
-
-class Crypter_ssl(object):
-    def __init__(self):
-        self.chKey = ctypes.create_string_buffer(32)
-        self.chIV = ctypes.create_string_buffer(16)
-
-    def SetKeyFromPassphrase(self, vKeyData, vSalt, nDerivIterations, nDerivationMethod):
-        if nDerivationMethod != 0:
-            return 0
-        strKeyData = ctypes.create_string_buffer(vKeyData)
-        chSalt = ctypes.create_string_buffer(vSalt)
-        return ssl.EVP_BytesToKey(ssl.EVP_aes_256_cbc(), ssl.EVP_sha512(), chSalt, strKeyData,
-                                  len(vKeyData), nDerivIterations, ctypes.byref(self.chKey), ctypes.byref(self.chIV))
-
-    def SetKey(self, key):
-        self.chKey = ctypes.create_string_buffer(key)
-
-    def SetIV(self, iv):
-        self.chIV = ctypes.create_string_buffer(iv)
-
-    def Encrypt(self, data):
-        buf = ctypes.create_string_buffer(len(data) + 16)
-        written = ctypes.c_int(0)
-        final = ctypes.c_int(0)
-        ctx = ssl.EVP_CIPHER_CTX_new()
-        ssl.EVP_CIPHER_CTX_init(ctx)
-        ssl.EVP_EncryptInit_ex(ctx, ssl.EVP_aes_256_cbc(), None, self.chKey, self.chIV)
-        ssl.EVP_EncryptUpdate(ctx, buf, ctypes.byref(written), data, len(data))
-        output = buf.raw[:written.value]
-        ssl.EVP_EncryptFinal_ex(ctx, buf, ctypes.byref(final))
-        output += buf.raw[:final.value]
-        return output
-
-    def Decrypt(self, data):
-        buf = ctypes.create_string_buffer(len(data) + 16)
-        written = ctypes.c_int(0)
-        final = ctypes.c_int(0)
-        ctx = ssl.EVP_CIPHER_CTX_new()
-        ssl.EVP_CIPHER_CTX_init(ctx)
-        ssl.EVP_DecryptInit_ex(ctx, ssl.EVP_aes_256_cbc(), None, self.chKey, self.chIV)
-        ssl.EVP_DecryptUpdate(ctx, buf, ctypes.byref(written), data, len(data))
-        output = buf.raw[:written.value]
-        ssl.EVP_DecryptFinal_ex(ctx, buf, ctypes.byref(final))
-        output += buf.raw[:final.value]
-        return output
-
-
 class Crypter_pure(object):
     def __init__(self):
         self.m = AESModeOfOperation()
@@ -1201,14 +1144,9 @@ class Crypter_pure(object):
 
 if crypter == 'pycrypto':
     crypter = Crypter_pycrypto()
-#	print "Crypter: pycrypto"
-elif crypter == 'ssl':
-    crypter = Crypter_ssl()
-#	print "Crypter: ssl"
 else:
     crypter = Crypter_pure()
-    #	print "Crypter: pure"
-    logging.warning("pycrypto or libssl not found, decryption may be slow")
+    logging.warning("pycrypto not found, decryption may be slow")
 
 ##########################################
 # end of pywallet crypter implementation #
@@ -1388,6 +1326,10 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
                     elif public_key == GetPubKey(pkey, compressed) and test_passphrase:
                         print "Correct"
                         exit(0)
+
+                if not ppcorrect:
+                    print "Incorrect passphrase!"
+                    exit(1)
 
                 sec = SecretToASecret(secret, compressed)
                 k['sec'] = sec
