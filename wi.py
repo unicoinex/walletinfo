@@ -13,87 +13,87 @@ __author__ = 'hesham'
 coins_list = {0: ["Bitcoin", "BTC",                             # OTHERVERSION: [Name, Code
                   "https://blockchain.info/rawaddr/%s",         # Machine Readable Balance URL
                   "https://blockchain.info/address/%s",         # Human Readable Address Info URL
-                  'final_balance":(\d+),', 0.00000001],         # Regex for Machine Readable URL, Multiplier]
+                  'final_balance":(\d+),', 0.00000001, 128],    # Regex for Machine Readable URL, Multiplier, PrivVersion]
               48: ["Litecoin", "LTC",
                    "http://ltc.blockr.io/api/v1/address/info/%s",
                    "http://ltc.blockr.io/address/info/%s",
-                   'balance": ([\d.]+),', 1],
+                   'balance": ([\d.]+),', 1, 176],
               55: ["Peercoin", "PPC",
                    "http://ppc.blockr.io/api/v1/address/info/%s",
                    "http://ppc.blockr.io/address/info/%s",
-                   'balance": ([\d.]+),', 1],
+                   'balance": ([\d.]+),', 1, 183],
               30: ["Dogecoin", "DOGE",
                    "https://dogechain.info/chain/Dogecoin/q/addressbalance/%s",
                    "http://dogechain.info/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 158],
               76: ["Darkcoin", "DRK",
                    "http://explorer.darkcoin.io/chain/DarkCoin/q/addressbalance/%s",
                    "http://explorer.darkcoin.io/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 204],
               52: ["Namecoin", "NMC",
                    "http://192.241.222.65/chain/Namecoin/q/addressbalance/%s",
                    "http://bitinfocharts.com/namecoin/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 128],
               25: ["Blackcoin", "BC",
                    "http://blocks.blackcoin.pw/chain/BlackCoin/q/addressbalance/%s",
                    "http://blocks.blackcoin.pw/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 153],
               56: ["BitShares-PTS", "PTS",
                    "http://ptsexplorer.cloudapp.net/chain/BitShares-PTS/q/addressbalance/%s",
                    "https://coinplorer.com/PTS/Addresses/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 184],
               71: ["Vertcoin", "VTC",
                    "https://explorer.vertcoin.org/chain/Vertcoin/q/addressbalance/%s",
                    "https://explorer.vertcoin.org/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 199],
               58: ["Quark", "QRK",
                    "http://qrk.blockr.io/api/v1/address/info/%s",
                    "http://qrk.blockr.io/address/info/%s",
-                   'balance": ([\d.]+),', 1],
+                   'balance": ([\d.]+),', 1, 186],
               23: ["Primecoin", "XPM",
                    "http://xpm.cryptocoinexplorer.com/api/balance/%s",
                    "http://xpm.cryptocoinexplorer.com/address/%s",
-                   'balance": ([\d.]+)', 1],
+                   'balance": ([\d.]+)', 1, 151],
               14: ["Feathercoin", "FTC",
                    "http://ftc.cryptocoinexplorer.com/api/balance/%s",
                    "http://ftc.cryptocoinexplorer.com/address/%s",
-                   'balance": ([\d.]+)', 1],
+                   'balance": ([\d.]+)', 1, 142],
               80: ["Zetacoin", "ZET",
                    "http://zetachain.cc/beta/index.php?engine=blockexplorer&address=%s",
                    "http://zetachain.cc/beta/index.php?engine=blockexplorer&address=%s",
-                   'balance": ([\d.]+)', 1],
+                   'balance": ([\d.]+)', 1, 224],
               50: ["Megacoin", "MEC",
                    "http://mec.blockr.io/api/v1/address/info/%s",
                    "http://mec.blockr.io/address/info/%s",
-                   'balance": ([\d.]+),', 1],
+                   'balance": ([\d.]+),', 1, 186],
               8: ["Novacoin", "NVC",
                    "http://nvc.cryptocoinexplorer.com/api/balance/%s",
                    "http://nvc.cryptocoinexplorer.com/address/%s",
-                   'balance": ([\d.]+)', 1],
+                   'balance": ([\d.]+)', 1, 136],
               102: ["Infinitecoin", "IFC",
                    "http://exploretheblocks.com:2750/chain/Infinitecoin/q/addressbalance/%s",
                    "http://exploretheblocks.com:2750/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 230],
               78: ["YbCoin", "YBC",
                    "http://explorer.ybcoin.com//chain/YbCoin/q/getbalance/%s",
                    "http://explorer.ybcoin.com/address/%s",
-                   '([\d.]+)', 1],
+                   '([\d.]+)', 1, 206],
               73: ["Worldcoin", "WDC",
                    "http://wdc.cryptocoinexplorer.com/api/balance/%s",
                    "http://wdc.cryptocoinexplorer.com/address/%s",
-                   'balance": ([\d.]+)', 1],
+                   'balance": ([\d.]+)', 1, 201],
               110: ["Maxcoin", "MAX",
                    "http://max.cryptoexplore.com/address/%s",
                    "http://max.cryptoexplore.com/address/%s",
-                   'Balance: </td><td>([\d.]+) MAX', 1],
+                   'Balance: </td><td>([\d.]+) MAX', 1, 128],
               43: ["Cinnicoin", "CINNI",
                    "http://cinnichain.info/api/address/%s",
                    "http://cinnichain.info/address/%s",
-                   'balance":([\d.]+),', 1],
+                   'balance":([\d.]+),', 1, 171],
               61: ["Reddcoin", "RDD",
                    "http://cryptexplorer.com/chain/ReddCoin/q/addressbalance/%s",
                    "http://cryptexplorer.com/address/%s",
-                   '([\d.]+)', 1]}
+                   '([\d.]+)', 1, 189]}
 
 missing_dep = []
 
@@ -133,6 +133,7 @@ balance_site = 'http://jackjack.alwaysdata.net/balance/index.php?address'
 json_db = {}
 addrtype = 0
 addr_to_keys = {}
+passphrase = ""
 
 
 class AES(object):
@@ -1406,7 +1407,7 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
     if vers > -1:
         addrtype = oldaddrtype
 
-    return {'crypted': crypted}
+    return crypted
 
 
 def open_wallet(db_env, walletfile):
@@ -1513,9 +1514,7 @@ def Hash(data):
 
 
 def SecretToASecret(secret, compressed=False):
-    prefix = chr((addrtype + 128) & 255)
-    if addrtype == 48:  #assuming Litecoin
-        prefix = chr(128)
+    prefix = chr(coins_list[addrtype][6])
     vchIn = prefix + secret
     if compressed: vchIn += '\01'
     return EncodeBase58Check(vchIn)
@@ -1791,17 +1790,17 @@ def print_keys(json_db, print_public=True, print_private=True):
     for k in json_db['keys']:
         if k:
             if print_public and print_private:
-                print k['pubkey'] + "," + k['private']
+                print k['addr'] + "," + k['sec']
             elif print_private:
-                print k['private']
+                print k['sec']
             elif print_public:
-                print k['pubkey']
+                print k['addr']
 
 
 def print_names(json_db):
     for n in json_db['names']:
         if n:
-            print n + "," + json_db['names'][n]
+            print n + "," + '"' + json_db['names'][n] + '"'
 
 
 def print_coin_type():
@@ -1827,13 +1826,9 @@ if __name__ == '__main__':
 
     parser = OptionParser(usage="%prog [options]", version="%prog 1.0")
 
-    parser.add_option("--datadir", dest="datadir",
-                      help="wallet directory (defaults to current directory)",
-                      default="./")
-
     parser.add_option("--wallet", dest="walletfile",
-                      help="wallet filename (defaults to wallet.dat)",
-                      default="wallet.dat")
+                      help="full path to wallet (defaults to ./wallet.dat)",
+                      default="./wallet.dat")
 
     parser.add_option("--is-encrypted", dest="check_encryption", action="store_true",
                       help="check if wallet is encrypted")
@@ -1862,7 +1857,7 @@ if __name__ == '__main__':
     parser.add_option("--balances", dest="list_balances", action="store_true",
                       help="list balances for each key")
 
-    parser.add_option("--explore-url", dest="list_explore_url", action="store_true",
+    parser.add_option("--explorer-url", dest="list_explore_url", action="store_true",
                       help="print block explorer url for each address")
 
     (options, args) = parser.parse_args()
@@ -1878,7 +1873,8 @@ if __name__ == '__main__':
         print("%s needs 'ecdsa' package to run, please install it" % prog)
         exit(0)
 
-    db_dir = options.datadir
+    db_dir = os.path.dirname(options.walletfile)
+    wallet_file = os.path.basename(options.walletfile)
     db_env = create_env(db_dir)
 
     if not options.check_encryption and not options.test_passphrase and not options.determine_coin \
@@ -1897,10 +1893,17 @@ if __name__ == '__main__':
         exit(0)
 
     if options.list_keys:
+        print DecodeBase58Check("T51cyEnmbv9Dok5DyAbsQ7sLs6gnZvUyrciySbaqyYU2b2X5hwNV").encode('hex')
+        if encrypted and not passphrase:
+            print "Can't print public and private keys for encrypted wallet without passphrase!"
+            exit(1)
         print_keys(json_db)
         exit(0)
 
     if options.list_private_keys:
+        if encrypted and not passphrase:
+            print "Can't print private keys for encrypted wallet without passphrase!"
+            exit(1)
         print_keys(json_db, False, True)
         exit(0)
 
@@ -1913,7 +1916,6 @@ if __name__ == '__main__':
         exit(0)
 
     if options.list_balances:
-        #test_print_balance("mxmnhb4r5UghkahuxumPKkwRA9SJk4c4dT", 76)
         print_balances(json_db)
         exit(0)
 
