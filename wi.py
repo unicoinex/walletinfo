@@ -93,7 +93,15 @@ coins_list = {0: ["Bitcoin", "BTC",                             # OTHERVERSION: 
               61: ["Reddcoin", "RDD",
                    "http://cryptexplorer.com/chain/ReddCoin/q/addressbalance/%s",
                    "http://cryptexplorer.com/address/%s",
-                   '([\d.]+)', 1, 189]}
+                   '([\d.]+)', 1, 189],
+              68: ["Ultracoin", "UTC",
+                   "http://bitgo.pw:3731/chain/Ultracoin/q/addressbalance/%s",
+                   "http://bitgo.pw:3731/address/%s",
+                   '([\d.]+)', 1, 196],
+              51: ["MintCoin", "MNT",
+                   "http://mint.blockx.info/get/chain/MintCoin/q/addressbalance/%s",
+                   "http://mint.blockx.info/get/address/%s",
+                   '([\d.]+)', 1, 179]}
 
 missing_dep = []
 
@@ -202,11 +210,6 @@ class AES(object):
         return self.rsbox[num]
 
     def rotate(self, word):
-        """ Rijndael's key schedule rotate operation.
-
-		Rotate a word eight bits to the left: eg, rotate(1d2c3a4f) == 2c3a4f1d
-		Word is an char list of size 4 (32 bits overall).
-		"""
         return word[1:] + word[:1]
 
     # Rijndael Rcon
@@ -1213,10 +1216,6 @@ def read_wallet(json_db, walletfile, print_wallet, print_wallet_transactions, tr
             json_db['wkey']['created'] = d['created']
 
         elif type == "pool":
-            """	d['n'] = kds.read_int64()
-				d['nVersion'] = vds.read_int32()
-				d['nTime'] = vds.read_int64()
-				d['public_key'] = vds.read_bytes(vds.read_compact_size())"""
             try:
                 json_db['pool'].append({'n': d['n'], 'addr': public_key_to_bc_address(d['public_key']),
                                         'addr2': public_key_to_bc_address(d['public_key'].decode('hex')),
@@ -1421,8 +1420,6 @@ def b58encode(v):
 
 
 def b58decode(v, length):
-    """ decode v into a string of len bytes
-	"""
     long_value = 0L
     for (i, c) in enumerate(v[::-1]):
         long_value += __b58chars.find(c) * (__b58base ** i)
@@ -1527,6 +1524,9 @@ def parse_wallet(db, item_callback):
                 d['name'] = vds.read_string()
                 global addrtype
                 addrtype = get_addrtype(d['hash'])
+                if addrtype not in coins_list:
+                    print "Wallet coin undefined/unsupported. Otherversion: " + str(addrtype)
+                    exit(1)
                 break
 
         except Exception, e:
