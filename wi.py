@@ -1230,7 +1230,7 @@ def read_wallet(json_db, walletfile, print_wallet, print_wallet_transactions, tr
 
         elif type == "acc":
             json_db['acc'] = d['account']
-            print("Account %s (current key: %s)" % (d['account'], public_key_to_bc_address(d['public_key'])))
+            # print("Account %s (current key: %s)" % (d['account'], public_key_to_bc_address(d['public_key'])))
 
         elif type == "acentry":
             json_db['acentry'] = (
