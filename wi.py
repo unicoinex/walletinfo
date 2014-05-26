@@ -125,6 +125,7 @@ import urllib
 import random
 import os
 import re
+import tempfile
 
 
 #TODO this URL should come from the config file
@@ -1152,14 +1153,8 @@ else:
 # end of pywallet crypter implementation #
 ##########################################
 
-def create_env(db_dir):
-    db_env = DBEnv(0)
-    r = db_env.open(db_dir,
-                    (DB_CREATE | DB_INIT_LOCK | DB_INIT_LOG | DB_INIT_MPOOL | DB_INIT_TXN | DB_THREAD | DB_RECOVER))
-    return db_env
 
-
-def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transactions, transaction_filter,
+def read_wallet(json_db, walletfile, print_wallet, print_wallet_transactions, transaction_filter,
                 include_balance, test_passphrase=False, vers=-1):
     global passphrase, addr_to_keys
     crypted = False
@@ -1172,7 +1167,7 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
         oldaddrtype = addrtype
         addrtype = vers
 
-    db = open_wallet(db_env, walletfile)
+    db = open_wallet(walletfile)
 
     json_db['keys'] = []
     json_db['pool'] = []
@@ -1355,11 +1350,10 @@ def read_wallet(json_db, db_env, walletfile, print_wallet, print_wallet_transact
     return crypted
 
 
-def open_wallet(db_env, walletfile):
-    db = DB(db_env)
+def open_wallet(walletfile):
+    db = DB()
 
-    DB_TYPEOPEN = DB_RDONLY
-    flags = DB_THREAD | DB_TYPEOPEN
+    flags = DB_THREAD | DB_RDONLY
     # noinspection PyUnresolvedReferences
     try:
         r = db.open(walletfile, "main", DB_BTREE, flags)
@@ -1820,7 +1814,7 @@ if __name__ == '__main__':
 
     db_dir = os.path.dirname(options.walletfile)
     wallet_file = os.path.basename(options.walletfile)
-    db_env = create_env(db_dir)
+    #db_env = create_env(db_dir)
 
     if not options.check_encryption and not options.test_passphrase and not options.determine_coin \
             and not options.list_keys and not options.list_public_keys and not options.list_private_keys \
@@ -1828,7 +1822,7 @@ if __name__ == '__main__':
         print("Nothing to do! For help run '%s --help'" % prog)
         exit(0)
 
-    encrypted = read_wallet(json_db, db_env, options.walletfile, True, True, "", False, options.test_passphrase)
+    encrypted = read_wallet(json_db, options.walletfile, True, True, "", False, options.test_passphrase)
 
     if options.check_encryption:
         if encrypted:
