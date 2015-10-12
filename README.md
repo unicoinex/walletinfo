@@ -1,7 +1,7 @@
 walletinfo
 ==========
 
-Multi-coin wallet info tool
+Multi-coin wallet info tool, returns balances, public/private keys, contacts and more information about a wallet.dat file. a more simple/minimal alternative to pywallet.
 
 ```
 Usage: wi.py [options]
